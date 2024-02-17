@@ -1,0 +1,6 @@
+server:
+  port: 9101
+spring:
+  profiles:
+    include: auth
+    active: dev

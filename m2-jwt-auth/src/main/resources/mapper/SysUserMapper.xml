@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhifei.dao.SysUserMapper">
+    <sql id="userColumns">
+        su.id, su.username, su.password, su.enabled, su.salt, su.hash_iterations AS hashIterations,
+        su.create_by AS createBy, su.update_by AS updateBy,
+        su.create_time AS createTime, su.update_time AS updateTime
+    </sql>
+    <sql id="roleColumns">
+        sr.id, sr.title, sr.name, sr.level, sr.description,
+        sr.create_by AS createBy, sr.update_by AS updateBy,
+        sr.create_time AS createTime, sr.update_time AS updateTime
+    </sql>
+    <sql id="menuColumns">
+        sm.id, sm.pid, sm.title, sm.name, sm.sort, sm.permission,
+        sr.create_by AS createBy, sr.update_by AS updateBy,
+        sr.create_time AS createTime, sr.update_time AS updateTime
+    </sql>
+    <select id="getByUsername" resultType="SysUser">
+        SELECT <include refid="userColumns"/>
+        FROM sys_user su WHERE su.username = #{username}
+    </select>
+    <select id="getRolesByUserId" resultType="SysRole">
+        SELECT <include refid="roleColumns"/>
+        FROM sys_role sr, sys_user su, sys_users_roles sur
+        WHERE sr.id = sur.role_id AND su.id = sur.user_id AND su.id = #{id}
+    </select>
+    <select id="getMenusByUserId" resultType="SysMenu">
+        SELECT <include refid="menuColumns"/>
+        FROM sys_menu sm, sys_roles_menus srm, sys_role sr, sys_user su, sys_users_roles sur
+        WHERE sm.id = srm.menu_id AND srm.role_id = sr.id AND sr.id = sur.role_id AND sur.user_id = su.id
+        AND su.id = #{id}
+    </select>
+    <select id="getLowerLevelRoles" resultType="SysRole">
+        SELECT <include refid="roleColumns"/>
+        FROM sys_role sr WHERE #{level} > sr.level
+    </select>
+    <select id="getLowerLevelMenus" resultType="SysMenu">
+        SELECT <include refid="menuColumns"/>
+        FROM sys_role sr, sys_roles_menus srm, sys_menu sm
+        WHERE sr.id = srm.role_id AND srm.menu_id = sm.id
+        AND #{level} > sr.level
+    </select>
+</mapper>

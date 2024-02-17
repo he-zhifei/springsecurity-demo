@@ -1,0 +1,35 @@
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    primary:
+      url: jdbc:mysql://127.0.0.1:3306/springsecurity-demo?useUnicode=true&characterEncoding=utf-8&serverTimezone=UTC&useSSL=false
+      driver-class-name: com.mysql.jdbc.Driver
+      username: root
+      password: 123456
+      initialSize: 5      #初始化大小
+      minIdle: 0       #最小闲置
+      #maxIdle: 10     #最大闲置（已被druid官方弃用）
+      maxActive: 300      #最大
+      maxWait: 60000      #配置获取连接等待超时的时间
+      timeBetweenEvictionRunsMillis: 60000        #配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+      minEvictableIdleTimeMillis: 300000          #配置一个连接在池中最小生存的时间，单位是毫秒
+      validationQuery: SELECT 1 FROM DUAL
+      testWhileIdle: true
+      testOnBorrow: false
+      testOnReturn: false
+      #打开PSCache，并且指定每个连接上PSCache的大小
+      poolPreparedStatements: true
+      maxPoolPreparedStatementPerConnectionSize: 20
+      filters: stat,wall      #配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙，eg:stat,wall,log4j
+      connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000      #通过connectProperties属性来打开mergeSql功能；慢SQL记录
+      useGlobalDataSourceStat: true       #合并多个DruidDataSource的监控数据
+
+# 另外指定rsa公私钥文件位置，可以不指定使用默认值
+jwt:
+  rsa:
+    publicKey: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAgAVJlcg2XRI7oPdpQSiPm3NxcYWmF7XxUgkxY30HYRryIAcPn6tJ2unxD3Dor3wPQ2EMLydDxweuvFCGec36glOFRLUaN7D0FDP1gyuoOQuMdg/3EeVfXWy2ZYPTDE36zWeNVii+xCrkwYP9xZZg3zWDX7jPrTvSEKPhPdhNPtUFxTITfpo1fV5pmJU+qWJ9Ze8y+eoJ/jDFjesq1TM8pjX2ZOj7wJgz1txflx5GGMD5QAW9JUCZEGOVIFXRwURb4RBJCX8UujYjGdcWMf9oZARiS32M8OrYmwcLZfmGEISS6OtD5CPkwSg7PIFC86ZmTVVDSQMsnW/VCOvjtTQp+QIDAQAB
+    privateKey: MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCABUmVyDZdEjug92lBKI+bc3FxhaYXtfFSCTFjfQdhGvIgBw+fq0na6fEPcOivfA9DYQwvJ0PHB668UIZ5zfqCU4VEtRo3sPQUM/WDK6g5C4x2D/cR5V9dbLZlg9MMTfrNZ41WKL7EKuTBg/3FlmDfNYNfuM+tO9IQo+E92E0+1QXFMhN+mjV9XmmYlT6pYn1l7zL56gn+MMWN6yrVMzymNfZk6PvAmDPW3F+XHkYYwPlABb0lQJkQY5UgVdHBRFvhEEkJfxS6NiMZ1xYx/2hkBGJLfYzw6tibBwtl+YYQhJLo60PkI+TBKDs8gULzpmZNVUNJAyydb9UI6+O1NCn5AgMBAAECggEAHYiavDovCHOfW/gXyRdhYdxVDHpnocqwfFtwkGIUpLtBpk/as9whMqaLnSNQGsPFBadK10n4od7M2da93zW8l/pKoVoiTTy+YjbGaddVfKuEYOw39GH1CSl+PpcVxh3rQR2lhn3p3HmEwnv/vGh/up6uyxNona9SO9KCsPDIiTjqCgOb9/357TO/Jy0/zeYTaZR5LRPYKKEJY3XiyzpAgnzykg5oC+Qi7CIri+AokTmx3cRwFlqPcycaILeuDrCba8repc5WZZ6PnCDYs0gn4/XNM/dSAQqscWB2d6jO1GHJZM87zeSiJ9SrsvplODg2RaxsJ85lMFSlGyYAV7KTnQKBgQC5PSlVJNxttRA9DyXNzcASaiy5Znrv/eL9vShMlbb8rq2y1Pf3CAKdezWxX81qqEk4b9Uyw9L+Nj2vUZ0RHsB+78KD+RODnqd04otQaunWcHOGXGWRrGC6YQeTYxVaoFdWXzGGIDdkdVGadlm+f0dVTehpPJhEZ3sd4gRruhuCEwKBgQCw7Kbs/SxVP8S+v7as7m5uLCvQqqGFpiLFqBodvglvpxzlHRb+9YD3hzMSa75M4SXmlNqCgrTGWy4Wk2CJ7+bL/I8SApqIoBIN/ZU2BRweuZPrzbG6RnmrJ05knye4rz09x+hLeEvuVOZvEQ+5X+jne0pYtydqNHf8BO+jgIZFQwKBgHU6aqTyrflT5BHwOylyc4Jz5Rfz7gthbjzMb+t/uA1TcqPBOagBTr5hEgrNqU89bxEjXRZCbY3pv8Hq8W67OnFaxIwGnj3msu06zZW4A4JtKf83DCRTpedtroCs7P+sh3kmx02tp8CQqnMJQSRYokkvA81NxsNLhdPUjJ2sauo3AoGAJjqsgw7dknoZ+CGSxmEqyXGP8iG8jxVr9AuzwPN8NH0GmFclzeece1/iYDuZviD0QJOvd33os+el2Mj1ljiZRUCIZZrca2MzI4TExgxqnBT7antiyN5LkfkHTmS5f4WWFRBqGEyhE5mSxTMJk8Ounr4cPXkt8hvuRS2H3mt6F+MCgYEAruR59MMVi0FnSntimvMkKqyKeqJm8Avq8rkh9c15m58ucJPEdj4FZnhYnK2K05zdZgr4l7As3yaBZtbEqTnY4/DdXtMUAqjW5LsbqRGsnwOQEyBr1gPMSSJOXpap0mpne6cDP+aoo1ijLdF2Jh6hjmoC/2fqv65IXW7EUyuzWto=
+
+logging:
+  level:
+    com.zhifei.dao: debug
